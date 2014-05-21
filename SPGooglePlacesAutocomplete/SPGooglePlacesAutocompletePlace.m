@@ -48,15 +48,48 @@
         if (error) {
             block(nil, nil, error);
         } else {
-            NSString *addressString = placeDictionary[@"formatted_address"];
-            [[self geocoder] geocodeAddressString:addressString completionHandler:^(NSArray *placemarks, NSError *error) {
-                if (error) {
-                    block(nil, nil, error);
-                } else {
-                    CLPlacemark *placemark = [placemarks onlyObject];
-                    block(placemark, self.name, error);
+            // Create palcemark from coordinates
+            if ([placeDictionary objectForKey:@"geometry"]) {
+                NSDictionary *locationDictionnary = [[placeDictionary objectForKey:@"geometry"] objectForKey:@"location"];
+                CLLocation *location;
+
+                if ([locationDictionnary objectForKey:@"lat"] && [locationDictionnary objectForKey:@"lng"]) {
+                    CGFloat latitude = 360.0f;
+                    CGFloat longitude = 360.0f;
+
+                    if ([locationDictionnary objectForKey:@"lat"]) {
+                        latitude = [[locationDictionnary objectForKey:@"lat"] floatValue];
+                    }
+
+                    if ([locationDictionnary objectForKey:@"lng"]) {
+                        longitude = [[locationDictionnary objectForKey:@"lng"] floatValue];
+                    }
+
+                    location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
                 }
-            }];
+
+                [[self geocoder] reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+                    if (error) {
+                        block(nil, nil, error);
+                    }
+                    else {
+                        CLPlacemark *placemark = [placemarks onlyObject];
+                        block(placemark, self.name, error);
+                    }
+                }];
+            }
+            else {
+                // use geocoder
+                NSString *addressString = placeDictionary[@"formatted_address"];
+                [[self geocoder] geocodeAddressString:addressString completionHandler:^(NSArray *placemarks, NSError *error) {
+                    if (error) {
+                        block(nil, nil, error);
+                    } else {
+                        CLPlacemark *placemark = [placemarks onlyObject];
+                        block(placemark, self.name, error);
+                    }
+                }];
+            }
         }
     }];
 }
