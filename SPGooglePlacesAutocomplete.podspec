@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "SPGooglePlacesAutocomplete"
-  s.version      = "1.0.2"
+  s.version      = "1.0.3"
   s.summary      = "An objective-c wrapper around the Google Places autocomplete API. Includes sample application emulating the Maps app."
   s.description  = <<-DESC
                    SPGooglePlacesAutocomplete is a simple objective-c wrapper around the Google Places Autocomplete API.
