@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Stephen Poletto. All rights reserved.
 //
 
+#import <MapKit/Mapkit.h>
+
 #import "SPGooglePlacesAutocompletePlace.h"
 #import "SPGooglePlacesPlaceDetailQuery.h"
 
@@ -25,6 +27,16 @@
     place.reference = placeDictionary[@"reference"];
     place.identifier = placeDictionary[@"id"];
     place.type = SPPlaceTypeFromDictionary(placeDictionary);
+    place.key = apiKey;
+    return place;
+}
+
++ (SPGooglePlacesAutocompletePlace *)placeFromMKMapItem:(MKMapItem *)mapItem apiKey:(NSString *)apiKey {
+    SPGooglePlacesAutocompletePlace *place = [[self alloc] init];
+    place.name = mapItem.name;
+    place.reference = mapItem.url.absoluteString;
+    place.reference = mapItem.url.absoluteString;
+    place.type = SPPlaceTypeGeocode;
     place.key = apiKey;
     return place;
 }

@@ -26,6 +26,7 @@
 }
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
     self.searchDisplayController.searchBar.placeholder = @"Search or Address";
 }
 
