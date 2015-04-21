@@ -11,7 +11,7 @@
 #import "SPGooglePlacesAutocompleteQuery.h"
 #import "SPGooglePlacesAutocompletePlace.h"
 
-static const float kMinWithAppleMaps = 0.0f;
+static const float kMinWithAppleMaps = 5.0f;
 
 @interface SPGooglePlacesAutocompleteQuery()
 

@@ -52,13 +52,6 @@
     }
 }
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-    if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
-        // Ensure that you can view your own location in the map view.
-        [self.mapView setShowsUserLocation:YES];
-    }
-}
-
 - (void)viewDidUnload {
     [self setMapView:nil];
     [super viewDidUnload];
@@ -255,6 +248,15 @@
     [self addPlacemarkAnnotationToMap:placemark addressString:addr];
     [self recenterMapToPlacemark:placemark];
     [self dismissSearchControllerWhileStayingActive];
+}
+
+#pragma mark - CLLocationManagerDelegate methods
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        // Ensure that you can view your own location in the map view.
+        [self.mapView setShowsUserLocation:YES];
+    }
 }
 
 @end

@@ -10,7 +10,7 @@
 
 
 @interface SPGooglePlacesAutocompleteQuery ()
-- (NSString *)googleURLString;
+@property (nonatomic, readwrite) BOOL shouldUseAppleMaps;
 @end
 
 @interface SPGooglePlacesAutocompleteQueryTests : XCTestCase
@@ -142,6 +142,7 @@
     [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
         XCTAssertNotEqual([places count], 0);
         XCTAssertNil(error);
+        XCTAssertTrue(self.qry.shouldUseAppleMaps);
         [expectation fulfill];
     }];
     [self waitForExpectationsWithTimeout:40.0 handler:nil];
@@ -163,6 +164,7 @@
     [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
         XCTAssertNotEqual([places count], 0);
         XCTAssertNil(error);
+        XCTAssertTrue(self.qry.shouldUseAppleMaps);
         [expectation fulfill];
     }];
 
