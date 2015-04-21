@@ -18,6 +18,7 @@ static const float kMinWithAppleMaps = 0.0f;
 @property (nonatomic, copy) SPGooglePlacesAutocompleteResultBlock resultBlock;
 @property (nonatomic, strong, readwrite) NSTimer *appleMapsTimer;
 @property (nonatomic, readwrite) BOOL shouldUseAppleMaps;
+@property (nonatomic, strong, readwrite) MKLocalSearch *localSearch;
 
 @end
 
@@ -70,7 +71,7 @@ static const float kMinWithAppleMaps = 0.0f;
     googleConnection = nil;
     responseData = nil;
     self.resultBlock = nil;
-    self.searchRequest = nil;
+    self.localSearch = nil;
 }
 
 - (void)cancelOutstandingRequests {
@@ -100,16 +101,14 @@ static const float kMinWithAppleMaps = 0.0f;
         googleConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
         responseData = [[NSMutableData alloc] init];
     } else {
-        if (!self.searchRequest) {
-            self.searchRequest = [[MKLocalSearchRequest alloc] init];
-        }
-        [self.searchRequest setNaturalLanguageQuery:self.input];
+        MKLocalSearchRequest* searchRequest = [[MKLocalSearchRequest alloc] init];
+        [searchRequest setNaturalLanguageQuery:self.input];
         if ((self.location.latitude != -1) &&
             (self.location.longitude != -1)) {
             MKCoordinateRegion locationRegion = MKCoordinateRegionMakeWithDistance(self.location, self.radius, self.radius);
-            [self.searchRequest setRegion:locationRegion];
+            [searchRequest setRegion:locationRegion];
         }
-        self.localSearch = [[MKLocalSearch alloc] initWithRequest:self.searchRequest];
+        self.localSearch = [[MKLocalSearch alloc] initWithRequest:searchRequest];
         [self.localSearch startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
             if (!error) {
                 NSMutableArray *parsedPlaces = [NSMutableArray array];

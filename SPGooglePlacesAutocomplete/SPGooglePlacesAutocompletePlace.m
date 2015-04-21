@@ -34,7 +34,6 @@
     place.key = apiKey;
     place.placeMark = nil;
     place.shouldResolvePlacemark = YES;
-//    [place resolveToPlacemark:nil];
     return place;
 }
 
