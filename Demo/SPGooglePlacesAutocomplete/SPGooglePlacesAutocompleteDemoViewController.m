@@ -5,11 +5,14 @@
 //  Created by Stephen Poletto on 7/17/12.
 //  Copyright (c) 2012 Stephen Poletto. All rights reserved.
 //
-
+#import <MapKit/MapKit.h>
 #import "SPGooglePlacesAutocompleteDemoViewController.h"
 #import "SPGooglePlacesAutocomplete.h"
 
+
 @interface SPGooglePlacesAutocompleteDemoViewController ()
+
+@property (nonatomic, strong, readwrite) CLLocationManager *locationManager;
 
 @end
 
@@ -28,6 +31,32 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.searchDisplayController.searchBar.placeholder = @"Search or Address";
+
+
+
+    // Request use on iOS 8
+    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1) {
+        // Ensure that you can view your own location in the map view.
+        [self.mapView setShowsUserLocation:YES];
+    } else {
+        //Instantiate a location object.
+        self.locationManager = [[CLLocationManager alloc] init];
+
+        //Make this controller the delegate for the location manager.
+        [self.locationManager setDelegate:self];
+
+        //Set some parameters for the location object.
+        [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+        [self.locationManager requestAlwaysAuthorization];
+    }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        // Ensure that you can view your own location in the map view.
+        [self.mapView setShowsUserLocation:YES];
+    }
 }
 
 - (void)viewDidUnload {
@@ -111,21 +140,28 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     SPGooglePlacesAutocompletePlace *place = [self placeAtIndexPath:indexPath];
-    [place resolveToPlacemark:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
-        if (error) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not map selected Place"
-                                                            message:error.localizedDescription
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil, nil];
-            [alert show];
-        } else if (placemark) {
-            [self addPlacemarkAnnotationToMap:placemark addressString:addressString];
-            [self recenterMapToPlacemark:placemark];
-            [self dismissSearchControllerWhileStayingActive];
-            [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:NO];
-        }
-    }];
+
+    if (place.shouldResolvePlacemark == YES) {
+        [place resolveToPlacemark:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
+
+
+            if (error) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not map selected Place"
+                                                                message:error.localizedDescription
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil, nil];
+                [alert show];
+            } else if (placemark) {
+                [self addPlacemarkToMap:placemark address:addressString];
+                [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:NO];
+            }
+        }];
+    } else {
+        [self addPlacemarkToMap:place.placeMark address:place.name];
+        [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+
 }
 
 #pragma mark -
@@ -213,6 +249,12 @@
 
 - (void)annotationDetailButtonPressed:(id)sender {
     // Detail view controller application logic here.
+}
+
+- (void)addPlacemarkToMap:(CLPlacemark *)placemark  address:(NSString *)addr{
+    [self addPlacemarkAnnotationToMap:placemark addressString:addr];
+    [self recenterMapToPlacemark:placemark];
+    [self dismissSearchControllerWhileStayingActive];
 }
 
 @end

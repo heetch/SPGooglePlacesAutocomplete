@@ -32,105 +32,83 @@
     [OHHTTPStubs removeAllStubs];
     [super tearDown];
 }
-//
-//- (void)testResults {
-//    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
-//        return YES;
-//    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-//
-//        NSDictionary *response = @{
-//                                   @"predictions" :
-//                                       @[
-//                                           @{
-//                                               @"description" : @"Paris, France",
-//                                               @"id" : @"691b237b0322f28988f3ce03e321ff72a12167fd",
-//                                               @"matched_substrings" :
-//                                                   @{
-//                                                       @"length" : [[NSNumber alloc] initWithInt:2],
-//                                                       @"offset" : [[NSNumber alloc] initWithInt:0]
-//                                                       },
-//                                               @"place_id" : @"ChIJD7fiBh9u5kcRYJSMaMOCCwQ",
-//                                               @"reference" : @"ClRPAAAAOV6o5AANjB6uMv1YPsyTyOliJvOW0kkm_jBOUiEDgzK7lmn1hvOVY0mZQzoV7nC5OcU8aKPhTRlmMDHFg1FUklX7b5AqPcowTx8qNYqnNAMSEDr56BSrORjB1fhKFBAKsuEaFAZfh-DqFAlnvI20BYNWnQ2mfldO",
-//                                               @"terms" :
-//                                                   @[@{
-//                                                         @"offset" : [[NSNumber alloc] initWithInt:0],
-//                                                         @"value" : @"Paris",
-//                                                         },
-//                                                     @{
-//                                                         @"offset" : [[NSNumber alloc] initWithInt:7],
-//                                                         @"value" : @"France",
-//                                                         }],
-//                                               @"types" :
-//                                                   @[@"locality", @"political", @"geocode"],
-//                                               },
-//                                           @{
-//                                               @"description" : @"Paris, France",
-//                                               @"id" : @"691b237b0322f28988f3ce03e321ff72a12167fd",
-//                                               @"matched_substrings" :
-//                                                   @{
-//                                                       @"length" : [[NSNumber alloc] initWithInt:2],
-//                                                       @"offset" : [[NSNumber alloc] initWithInt:0]
-//                                                       },
-//                                               @"place_id" : @"ChIJD7fiBh9u5kcRYJSMaMOCCwQ",
-//                                               @"reference" : @"ClRPAAAAOV6o5AANjB6uMv1YPsyTyOliJvOW0kkm_jBOUiEDgzK7lmn1hvOVY0mZQzoV7nC5OcU8aKPhTRlmMDHFg1FUklX7b5AqPcowTx8qNYqnNAMSEDr56BSrORjB1fhKFBAKsuEaFAZfh-DqFAlnvI20BYNWnQ2mfldO",
-//                                               @"terms" :
-//                                                   @[@{
-//                                                         @"offset" : [[NSNumber alloc] initWithInt:0],
-//                                                         @"value" : @"Paris",
-//                                                         },
-//                                                     @{
-//                                                         @"offset" : [[NSNumber alloc] initWithInt:7],
-//                                                         @"value" : @"France",
-//                                                         }],
-//                                               @"types" :
-//                                                   @[@"locality", @"political", @"geocode"],
-//                                               }
-//                                           ],
-//                                   @"status" : @"OK"
-//    };
-//        return [OHHTTPStubsResponse responseWithJSONObject:response
-//                                                statusCode:200 headers:nil];
-//    }];
-//
-//
-//    self.qry.input = @"Paris";
-//    XCTestExpectation *expectation = [self expectationWithDescription:@"PlacesSearchs"];
-//    [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
-//        XCTAssertEqual([places count], 2);
-//        XCTAssertNil(error);
-//        [expectation fulfill];
-//    }];
-//    [self waitForExpectationsWithTimeout:40.0 handler:nil];
-//}
-//
-//- (void) testNoResults {
-//    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
-//        return YES;
-//    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
-//        NSDictionary *response = @{
-//                                   @"status" : @"ZERO_RESULTS"
-//                                   };
-//        return [OHHTTPStubsResponse responseWithJSONObject:response
-//                                                statusCode:200 headers:nil];
-//    }];
-//
-//
-//    self.qry.input = @"Paris";
-//    XCTestExpectation *expectation = [self expectationWithDescription:@"PlacesSearchs"];
-//    [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
-//        XCTAssertEqual([places count], 0);
-//        XCTAssertNil(error);
-//        [expectation fulfill];
-//    }];
-//    [self waitForExpectationsWithTimeout:40.0 handler:nil];
-//}
 
-- (void)testRequestDenied {
+- (void)testResults {
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
-        return YES;
+        return [request.URL.host isEqualToString:@"maps.googleapis.com"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+
+        NSDictionary *response = @{
+                                   @"predictions" :
+                                       @[
+                                           @{
+                                               @"description" : @"Paris, France",
+                                               @"id" : @"691b237b0322f28988f3ce03e321ff72a12167fd",
+                                               @"matched_substrings" :
+                                                   @{
+                                                       @"length" : [[NSNumber alloc] initWithInt:2],
+                                                       @"offset" : [[NSNumber alloc] initWithInt:0]
+                                                       },
+                                               @"place_id" : @"ChIJD7fiBh9u5kcRYJSMaMOCCwQ",
+                                               @"reference" : @"ClRPAAAAOV6o5AANjB6uMv1YPsyTyOliJvOW0kkm_jBOUiEDgzK7lmn1hvOVY0mZQzoV7nC5OcU8aKPhTRlmMDHFg1FUklX7b5AqPcowTx8qNYqnNAMSEDr56BSrORjB1fhKFBAKsuEaFAZfh-DqFAlnvI20BYNWnQ2mfldO",
+                                               @"terms" :
+                                                   @[@{
+                                                         @"offset" : [[NSNumber alloc] initWithInt:0],
+                                                         @"value" : @"Paris",
+                                                         },
+                                                     @{
+                                                         @"offset" : [[NSNumber alloc] initWithInt:7],
+                                                         @"value" : @"France",
+                                                         }],
+                                               @"types" :
+                                                   @[@"locality", @"political", @"geocode"],
+                                               },
+                                           @{
+                                               @"description" : @"Paris, France",
+                                               @"id" : @"691b237b0322f28988f3ce03e321ff72a12167fd",
+                                               @"matched_substrings" :
+                                                   @{
+                                                       @"length" : [[NSNumber alloc] initWithInt:2],
+                                                       @"offset" : [[NSNumber alloc] initWithInt:0]
+                                                       },
+                                               @"place_id" : @"ChIJD7fiBh9u5kcRYJSMaMOCCwQ",
+                                               @"reference" : @"ClRPAAAAOV6o5AANjB6uMv1YPsyTyOliJvOW0kkm_jBOUiEDgzK7lmn1hvOVY0mZQzoV7nC5OcU8aKPhTRlmMDHFg1FUklX7b5AqPcowTx8qNYqnNAMSEDr56BSrORjB1fhKFBAKsuEaFAZfh-DqFAlnvI20BYNWnQ2mfldO",
+                                               @"terms" :
+                                                   @[@{
+                                                         @"offset" : [[NSNumber alloc] initWithInt:0],
+                                                         @"value" : @"Paris",
+                                                         },
+                                                     @{
+                                                         @"offset" : [[NSNumber alloc] initWithInt:7],
+                                                         @"value" : @"France",
+                                                         }],
+                                               @"types" :
+                                                   @[@"locality", @"political", @"geocode"],
+                                               }
+                                           ],
+                                   @"status" : @"OK"
+    };
+        return [OHHTTPStubsResponse responseWithJSONObject:response
+                                                statusCode:200 headers:nil];
+    }];
+
+
+    self.qry.input = @"Paris";
+    XCTestExpectation *expectation = [self expectationWithDescription:@"PlacesSearchs"];
+    [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
+        XCTAssertEqual([places count], 2);
+        XCTAssertNil(error);
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:40.0 handler:nil];
+}
+
+- (void) testNoResults {
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"maps.googleapis.com"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
         NSDictionary *response = @{
-                                   @"status" : @"REQUEST_DENIED"
+                                   @"status" : @"ZERO_RESULTS"
                                    };
         return [OHHTTPStubsResponse responseWithJSONObject:response
                                                 statusCode:200 headers:nil];
@@ -147,9 +125,31 @@
     [self waitForExpectationsWithTimeout:40.0 handler:nil];
 }
 
+- (void)testRequestDenied {
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"maps.googleapis.com"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        NSDictionary *response = @{
+                                   @"status" : @"REQUEST_DENIED"
+                                   };
+        return [OHHTTPStubsResponse responseWithJSONObject:response
+                                                statusCode:200 headers:nil];
+    }];
+
+
+    self.qry.input = @"Paris";
+    XCTestExpectation *expectation = [self expectationWithDescription:@"PlacesSearchs"];
+    [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
+        XCTAssertNotEqual([places count], 0);
+        XCTAssertNil(error);
+        [expectation fulfill];
+    }];
+    [self waitForExpectationsWithTimeout:40.0 handler:nil];
+}
+
 - (void)testOVER_QUERY_LIMIT {
     [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
-        return YES;
+        return [request.URL.host isEqualToString:@"maps.googleapis.com"];
     } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
         NSDictionary *response = @{
                                    @"status" : @"OVER_QUERY_LIMIT"
@@ -161,35 +161,12 @@
     self.qry.input = @"Paris";
     XCTestExpectation *expectation = [self expectationWithDescription:@"PlacesSearchs"];
     [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
-        XCTAssertEqual([places count], 0);
-        XCTAssertNil(error);
-//        [expectation fulfill];
-    }];
-
-    [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
-        XCTAssertEqual([places count], 0);
-        XCTAssertNil(error);
-//        [expectation fulfill];
-    }];
-
-
-    [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
-        XCTAssertEqual([places count], 0);
+        XCTAssertNotEqual([places count], 0);
         XCTAssertNil(error);
         [expectation fulfill];
     }];
 
-//    sleep(5 * 60);
-
-
-
-    [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
-        XCTAssertEqual([places count], 0);
-        XCTAssertNil(error);
-        [expectation fulfill];
-    }];
-
-    [self waitForExpectationsWithTimeout:10 *60.0 handler:nil];
+    [self waitForExpectationsWithTimeout:40.0 handler:nil];
 
 }
 

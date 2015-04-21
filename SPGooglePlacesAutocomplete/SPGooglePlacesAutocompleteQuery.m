@@ -70,10 +70,14 @@ static const float kMinWithAppleMaps = 0.0f;
     googleConnection = nil;
     responseData = nil;
     self.resultBlock = nil;
+    self.searchRequest = nil;
 }
 
 - (void)cancelOutstandingRequests {
     [googleConnection cancel];
+    if (self.localSearch.isSearching == YES) {
+        [self.localSearch cancel];
+    }
     [self cleanup];
 }
 
@@ -96,21 +100,22 @@ static const float kMinWithAppleMaps = 0.0f;
         googleConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
         responseData = [[NSMutableData alloc] init];
     } else {
-        MKLocalSearchRequest *searchRequest = [[MKLocalSearchRequest alloc] init];
-        [searchRequest setNaturalLanguageQuery:self.input];
-
+        if (!self.searchRequest) {
+            self.searchRequest = [[MKLocalSearchRequest alloc] init];
+        }
+        [self.searchRequest setNaturalLanguageQuery:self.input];
         if ((self.location.latitude != -1) &&
             (self.location.longitude != -1)) {
             MKCoordinateRegion locationRegion = MKCoordinateRegionMakeWithDistance(self.location, self.radius, self.radius);
-            [searchRequest setRegion:locationRegion];
+            [self.searchRequest setRegion:locationRegion];
         }
-        MKLocalSearch *localSearch = [[MKLocalSearch alloc] initWithRequest:searchRequest];
-        [localSearch startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
+        self.localSearch = [[MKLocalSearch alloc] initWithRequest:self.searchRequest];
+        [self.localSearch startWithCompletionHandler:^(MKLocalSearchResponse *response, NSError *error) {
             if (!error) {
                 NSMutableArray *parsedPlaces = [NSMutableArray array];
 
                 for (MKMapItem *mapItem in [response mapItems]) {
-                    [parsedPlaces addObject:[SPGooglePlacesAutocompletePlace placeFromMKMapItem:mapItem apiKey:self.key]];
+                    [parsedPlaces addObject:[SPGooglePlacesAutocompletePlace placeFromPlaceMark:mapItem.placemark]];
                 }
                 self.resultBlock(parsedPlaces, nil);
             } else {
