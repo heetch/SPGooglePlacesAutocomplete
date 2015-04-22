@@ -118,8 +118,14 @@ static const float kMinWithAppleMaps = 5.0f;
                 }
                 self.resultBlock(parsedPlaces, nil);
             } else {
-                self.resultBlock(nil, error);
+                if (error.code == MKErrorPlacemarkNotFound || error.code == MKErrorDirectionsNotFound) {
+                    [self succeedWithPlaces:@[]];
+                } else if (error.code != MKErrorLoadingThrottled) {
+                    // May happen if the user type too fast some rare time. We don't want to notify anyone about this error. It's gonna fix itself.
+                    self.resultBlock(nil, error);
+                }
             }
+            [self cleanup];
         }];
     }
 }

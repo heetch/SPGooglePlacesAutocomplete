@@ -32,22 +32,12 @@
     [super viewDidLoad];
     self.searchDisplayController.searchBar.placeholder = @"Search or Address";
 
+    self.locationManager = [[CLLocationManager alloc] init];
+    [self.locationManager setDelegate:self];
+    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
 
-
-    // Request use on iOS 8
-    if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1) {
-        // Ensure that you can view your own location in the map view.
-        [self.mapView setShowsUserLocation:YES];
-    } else {
-        //Instantiate a location object.
-        self.locationManager = [[CLLocationManager alloc] init];
-
-        //Make this controller the delegate for the location manager.
-        [self.locationManager setDelegate:self];
-
-        //Set some parameters for the location object.
-        [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
-        [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+    if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
         [self.locationManager requestAlwaysAuthorization];
     }
 }
@@ -66,7 +56,7 @@
     span.longitudeDelta = 0.02;
     
     region.span = span;
-    region.center = self.mapView.userLocation.coordinate;
+    region.center = self.locationManager.location.coordinate;
     
     [self.mapView setRegion:region animated:YES];
 }
