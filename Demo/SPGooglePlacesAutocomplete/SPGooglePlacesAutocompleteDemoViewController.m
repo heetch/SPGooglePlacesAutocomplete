@@ -5,11 +5,14 @@
 //  Created by Stephen Poletto on 7/17/12.
 //  Copyright (c) 2012 Stephen Poletto. All rights reserved.
 //
-
+#import <MapKit/MapKit.h>
 #import "SPGooglePlacesAutocompleteDemoViewController.h"
 #import "SPGooglePlacesAutocomplete.h"
 
+
 @interface SPGooglePlacesAutocompleteDemoViewController ()
+
+@property (nonatomic, strong, readwrite) CLLocationManager *locationManager;
 
 @end
 
@@ -26,7 +29,17 @@
 }
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
     self.searchDisplayController.searchBar.placeholder = @"Search or Address";
+
+    self.locationManager = [[CLLocationManager alloc] init];
+    [self.locationManager setDelegate:self];
+    [self.locationManager setDistanceFilter:kCLDistanceFilterNone];
+    [self.locationManager setDesiredAccuracy:kCLLocationAccuracyBest];
+
+    if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        [self.locationManager requestAlwaysAuthorization];
+    }
 }
 
 - (void)viewDidUnload {
@@ -43,7 +56,7 @@
     span.longitudeDelta = 0.02;
     
     region.span = span;
-    region.center = self.mapView.userLocation.coordinate;
+    region.center = self.locationManager.location.coordinate;
     
     [self.mapView setRegion:region animated:YES];
 }
@@ -110,21 +123,28 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     SPGooglePlacesAutocompletePlace *place = [self placeAtIndexPath:indexPath];
-    [place resolveToPlacemark:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
-        if (error) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not map selected Place"
-                                                            message:error.localizedDescription
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil, nil];
-            [alert show];
-        } else if (placemark) {
-            [self addPlacemarkAnnotationToMap:placemark addressString:addressString];
-            [self recenterMapToPlacemark:placemark];
-            [self dismissSearchControllerWhileStayingActive];
-            [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:NO];
-        }
-    }];
+
+    if (place.shouldResolvePlacemark == YES) {
+        [place resolveToPlacemark:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
+
+
+            if (error) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not map selected Place"
+                                                                message:error.localizedDescription
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil, nil];
+                [alert show];
+            } else if (placemark) {
+                [self addPlacemarkToMap:placemark address:addressString];
+                [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:NO];
+            }
+        }];
+    } else {
+        [self addPlacemarkToMap:place.placeMark address:place.name];
+        [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
+
 }
 
 #pragma mark -
@@ -212,6 +232,21 @@
 
 - (void)annotationDetailButtonPressed:(id)sender {
     // Detail view controller application logic here.
+}
+
+- (void)addPlacemarkToMap:(CLPlacemark *)placemark  address:(NSString *)addr{
+    [self addPlacemarkAnnotationToMap:placemark addressString:addr];
+    [self recenterMapToPlacemark:placemark];
+    [self dismissSearchControllerWhileStayingActive];
+}
+
+#pragma mark - CLLocationManagerDelegate methods
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    if (status == kCLAuthorizationStatusAuthorizedWhenInUse) {
+        // Ensure that you can view your own location in the map view.
+        [self.mapView setShowsUserLocation:YES];
+    }
 }
 
 @end

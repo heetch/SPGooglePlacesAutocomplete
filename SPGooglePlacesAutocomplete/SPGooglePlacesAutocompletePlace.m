@@ -6,14 +6,20 @@
 //  Copyright (c) 2012 Stephen Poletto. All rights reserved.
 //
 
+#import <MapKit/Mapkit.h>
+#import <AddressBookUI/AddressBookUI.h>
+
 #import "SPGooglePlacesAutocompletePlace.h"
 #import "SPGooglePlacesPlaceDetailQuery.h"
 
 @interface SPGooglePlacesAutocompletePlace()
+@property (nonatomic, readwrite) BOOL shouldResolvePlacemark;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *reference;
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic) SPGooglePlacesAutocompletePlaceType type;
+@property (nonatomic, strong, readwrite) CLPlacemark *placemark;
+
 @end
 
 @implementation SPGooglePlacesAutocompletePlace
@@ -26,6 +32,21 @@
     place.identifier = placeDictionary[@"id"];
     place.type = SPPlaceTypeFromDictionary(placeDictionary);
     place.key = apiKey;
+    place.placemark = nil;
+    place.shouldResolvePlacemark = YES;
+    return place;
+}
+
++ (SPGooglePlacesAutocompletePlace *)placeFromPlaceMark:(CLPlacemark *)placeMark {
+    SPGooglePlacesAutocompletePlace *place = [[self alloc] init];
+    place.name = ABCreateStringWithAddressDictionary(placeMark.addressDictionary, YES);
+    place.name = [place.name stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
+    place.reference = nil;
+    place.identifier = nil;
+    place.type = SPPlaceTypeGeocode;
+    place.key = nil;
+    place.placemark = placeMark;
+    place.shouldResolvePlacemark = NO;
     return place;
 }
 
@@ -62,11 +83,15 @@
 
     [[self geocoder] reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if (error) {
-            block(nil, nil, error);
+            if (block)
+                block(nil, nil, error);
         }
         else {
             CLPlacemark *placemark = [placemarks onlyObject];
-            block(placemark, self.name, error);
+            self.placemark = placemark;
+            self.shouldResolvePlacemark = NO;
+            if (block)
+                block(placemark, self.name, error);
         }
     }];
 }
@@ -74,10 +99,14 @@
 - (void)resolveToPlacemarkFromAdress:(NSString*)addressString withBlock:(SPGooglePlacesPlacemarkResultBlock)block {
     [[self geocoder] geocodeAddressString:addressString completionHandler:^(NSArray *placemarks, NSError *error) {
         if (error) {
-            block(nil, nil, error);
+            if (block)
+                block(nil, nil, error);
         } else {
             CLPlacemark *placemark = [placemarks onlyObject];
-            block(placemark, self.name, error);
+            self.placemark = placemark;
+            self.shouldResolvePlacemark = NO;
+            if (block)
+                block(placemark, self.name, error);
         }
     }];
 }

@@ -1,0 +1,7 @@
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '7.0'
+pod 'SPGooglePlacesAutocomplete', :path => '../'
+
+target :SPGooglePlacesAutocompleteDemoTests, :exclusive => true do
+    pod 'OHHTTPStubs'
+end
