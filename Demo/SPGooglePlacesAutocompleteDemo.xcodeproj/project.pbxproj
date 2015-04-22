@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		06CFA84A605AEEE9D2311E27 /* libPods-SPGooglePlacesAutocompleteDemoTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 33B4DC3001E9E978865EA2CA /* libPods-SPGooglePlacesAutocompleteDemoTests.a */; };
-		2114D1AC1AE50FE90028BC27 /* SPGooglePlacesAutocompleteDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2114D1AB1AE50FE90028BC27 /* SPGooglePlacesAutocompleteDemoTests.m */; };
+		2114D1AC1AE50FE90028BC27 /* SPGooglePlacesAutocompleteQueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2114D1AB1AE50FE90028BC27 /* SPGooglePlacesAutocompleteQueryTests.m */; };
 		219FE25E1AE64B270002F771 /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 219FE25D1AE64B270002F771 /* AddressBookUI.framework */; };
 		6B35175D18179A1400F0BD25 /* SPGooglePlacesAutocompletePlace.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B35175618179A1400F0BD25 /* SPGooglePlacesAutocompletePlace.m */; };
 		6B35175E18179A1400F0BD25 /* SPGooglePlacesAutocompleteQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B35175818179A1400F0BD25 /* SPGooglePlacesAutocompleteQuery.m */; };
@@ -46,7 +46,7 @@
 		1A1D9CB65EDBD3384753E6B3 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		2114D1A71AE50FE90028BC27 /* SPGooglePlacesAutocompleteDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SPGooglePlacesAutocompleteDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2114D1AA1AE50FE90028BC27 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2114D1AB1AE50FE90028BC27 /* SPGooglePlacesAutocompleteDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPGooglePlacesAutocompleteDemoTests.m; sourceTree = "<group>"; };
+		2114D1AB1AE50FE90028BC27 /* SPGooglePlacesAutocompleteQueryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SPGooglePlacesAutocompleteQueryTests.m; sourceTree = "<group>"; };
 		219FE25D1AE64B270002F771 /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		33B4DC3001E9E978865EA2CA /* libPods-SPGooglePlacesAutocompleteDemoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SPGooglePlacesAutocompleteDemoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B35175518179A1400F0BD25 /* SPGooglePlacesAutocompletePlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SPGooglePlacesAutocompletePlace.h; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 		2114D1A81AE50FE90028BC27 /* SPGooglePlacesAutocompleteDemoTests */ = {
 			isa = PBXGroup;
 			children = (
-				2114D1AB1AE50FE90028BC27 /* SPGooglePlacesAutocompleteDemoTests.m */,
+				2114D1AB1AE50FE90028BC27 /* SPGooglePlacesAutocompleteQueryTests.m */,
 				2114D1A91AE50FE90028BC27 /* Supporting Files */,
 			);
 			path = SPGooglePlacesAutocompleteDemoTests;
@@ -398,7 +398,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2114D1AC1AE50FE90028BC27 /* SPGooglePlacesAutocompleteDemoTests.m in Sources */,
+				2114D1AC1AE50FE90028BC27 /* SPGooglePlacesAutocompleteQueryTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
