@@ -124,7 +124,7 @@
         XCTAssertFalse(self.qry.shouldUseAppleMaps);
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:40.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)testRequestDenied {
@@ -147,7 +147,7 @@
         XCTAssertTrue(self.qry.shouldUseAppleMaps);
         [expectation fulfill];
     }];
-    [self waitForExpectationsWithTimeout:40.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 }
 
 - (void)testOVER_QUERY_LIMIT {
@@ -170,7 +170,7 @@
         [expectation fulfill];
     }];
 
-    [self waitForExpectationsWithTimeout:40.0 handler:nil];
+    [self waitForExpectationsWithTimeout:5.0 handler:nil];
 
 }
 
