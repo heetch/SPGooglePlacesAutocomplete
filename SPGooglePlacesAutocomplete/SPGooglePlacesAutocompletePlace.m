@@ -18,7 +18,7 @@
 @property (nonatomic, strong) NSString *reference;
 @property (nonatomic, strong) NSString *identifier;
 @property (nonatomic) SPGooglePlacesAutocompletePlaceType type;
-@property (nonatomic, strong, readwrite) CLPlacemark *placeMark;
+@property (nonatomic, strong, readwrite) CLPlacemark *placemark;
 
 @end
 
@@ -32,7 +32,7 @@
     place.identifier = placeDictionary[@"id"];
     place.type = SPPlaceTypeFromDictionary(placeDictionary);
     place.key = apiKey;
-    place.placeMark = nil;
+    place.placemark = nil;
     place.shouldResolvePlacemark = YES;
     return place;
 }
@@ -45,7 +45,7 @@
     place.identifier = nil;
     place.type = SPPlaceTypeGeocode;
     place.key = nil;
-    place.placeMark = placeMark;
+    place.placemark = placeMark;
     place.shouldResolvePlacemark = NO;
     return place;
 }
@@ -88,7 +88,7 @@
         }
         else {
             CLPlacemark *placemark = [placemarks onlyObject];
-            self.placeMark = placemark;
+            self.placemark = placemark;
             self.shouldResolvePlacemark = NO;
             if (block)
                 block(placemark, self.name, error);
@@ -103,7 +103,7 @@
                 block(nil, nil, error);
         } else {
             CLPlacemark *placemark = [placemarks onlyObject];
-            self.placeMark = placemark;
+            self.placemark = placemark;
             self.shouldResolvePlacemark = NO;
             if (block)
                 block(placemark, self.name, error);
