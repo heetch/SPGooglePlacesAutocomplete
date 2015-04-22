@@ -1,15 +1,19 @@
 PODS:
-  - OCMock (3.1.2)
   - OHHTTPStubs (3.1.11):
     - OHHTTPStubs/Core (= 3.1.11)
   - OHHTTPStubs/Core (3.1.11)
+  - SPGooglePlacesAutocomplete (1.1.0)
 
 DEPENDENCIES:
-  - OCMock
   - OHHTTPStubs
+  - SPGooglePlacesAutocomplete (from `../`)
+
+EXTERNAL SOURCES:
+  SPGooglePlacesAutocomplete:
+    :path: ../
 
 SPEC CHECKSUMS:
-  OCMock: a10ea9f0a6e921651f96f78b6faee95ebc813b92
   OHHTTPStubs: 5624a5d20d97d46d47e15a68ca8808b59ccf0512
+  SPGooglePlacesAutocomplete: 774735e5387fad18db54711e3da85e2ef8c14f39
 
 COCOAPODS: 0.36.3
