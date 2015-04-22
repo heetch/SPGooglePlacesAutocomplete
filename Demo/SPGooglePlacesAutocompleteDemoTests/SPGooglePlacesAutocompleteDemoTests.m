@@ -98,6 +98,7 @@
     [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
         XCTAssertEqual([places count], 2);
         XCTAssertNil(error);
+        XCTAssertFalse(self.qry.shouldUseAppleMaps);
         [expectation fulfill];
     }];
     [self waitForExpectationsWithTimeout:40.0 handler:nil];
@@ -120,6 +121,7 @@
     [self.qry fetchPlaces:^(NSArray *places, NSError *error) {
         XCTAssertEqual([places count], 0);
         XCTAssertNil(error);
+        XCTAssertFalse(self.qry.shouldUseAppleMaps);
         [expectation fulfill];
     }];
     [self waitForExpectationsWithTimeout:40.0 handler:nil];
