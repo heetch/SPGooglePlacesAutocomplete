@@ -45,7 +45,7 @@
 
 @property (nonatomic, readonly) BOOL shouldResolvePlacemark;
 
-@property (nonatomic, strong, readonly) CLPlacemark *placeMark;
+@property (nonatomic, strong, readonly) CLPlacemark *placemark;
 
 
 /*!
