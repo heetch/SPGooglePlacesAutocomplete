@@ -115,20 +115,25 @@
     SPGooglePlacesPlaceDetailQuery *query = [[SPGooglePlacesPlaceDetailQuery alloc] initWithApiKey:self.key];
 
     query.reference = self.reference;
-    [query fetchPlaceDetail:^(NSDictionary *placeDictionary, NSError *error) {
-        if (error) {
-            block(nil, nil, error);
-        } else {
-            // Create palcemark from coordinates
-            if ([placeDictionary objectForKey:@"geometry"]) {
-                [self resolveToPlacemarkFromLocation:placeDictionary withBlock:block];
+    if (self.shouldResolvePlacemark == YES) {
+
+        [query fetchPlaceDetail:^(NSDictionary *placeDictionary, NSError *error) {
+            if (error) {
+                block(nil, nil, error);
+            } else {
+                // Create palcemark from coordinates
+                if ([placeDictionary objectForKey:@"geometry"]) {
+                    [self resolveToPlacemarkFromLocation:placeDictionary withBlock:block];
+                }
+                else {
+                    // use geocoder
+                    [self resolveToPlacemarkFromAdress:placeDictionary[@"formatted_address"] withBlock:block];
+                }
             }
-            else {
-                // use geocoder
-                [self resolveToPlacemarkFromAdress:placeDictionary[@"formatted_address"] withBlock:block];
-            }
-        }
-    }];
+        }];
+    } else {
+        block(self.placeMark, self.name, nil);
+    }
 }
 
 @end

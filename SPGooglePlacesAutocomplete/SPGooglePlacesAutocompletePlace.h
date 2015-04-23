@@ -43,8 +43,6 @@
  */
 @property (nonatomic, strong) NSString *key;
 
-@property (nonatomic, readonly) BOOL shouldResolvePlacemark;
-
 @property (nonatomic, strong, readonly) CLPlacemark *placemark;
 
 
