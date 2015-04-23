@@ -124,27 +124,21 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     SPGooglePlacesAutocompletePlace *place = [self placeAtIndexPath:indexPath];
 
-    if (place.shouldResolvePlacemark == YES) {
-        [place resolveToPlacemark:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
+    [place resolveToPlacemark:^(CLPlacemark *placemark, NSString *addressString, NSError *error) {
 
 
-            if (error) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not map selected Place"
-                                                                message:error.localizedDescription
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"OK"
-                                                      otherButtonTitles:nil, nil];
-                [alert show];
-            } else if (placemark) {
-                [self addPlacemarkToMap:placemark address:addressString];
-                [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:NO];
-            }
-        }];
-    } else {
-        [self addPlacemarkToMap:place.placeMark address:place.name];
-        [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:NO];
-    }
-
+        if (error) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not map selected Place"
+                                                            message:error.localizedDescription
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil, nil];
+            [alert show];
+        } else if (placemark) {
+            [self addPlacemarkToMap:placemark address:addressString];
+            [self.searchDisplayController.searchResultsTableView deselectRowAtIndexPath:indexPath animated:NO];
+        }
+    }];
 }
 
 #pragma mark -
