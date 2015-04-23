@@ -132,7 +132,7 @@
             }
         }];
     } else {
-        block(self.placeMark, self.name, nil);
+        block(self.placemark, self.name, nil);
     }
 }
 
