@@ -116,13 +116,17 @@ static const float kMinWithAppleMaps = 5.0f;
                 for (MKMapItem *mapItem in [response mapItems]) {
                     [parsedPlaces addObject:[SPGooglePlacesAutocompletePlace placeFromPlaceMark:mapItem.placemark]];
                 }
-                self.resultBlock(parsedPlaces, nil);
+                if (self.resultBlock != nil) {
+                    self.resultBlock(parsedPlaces, nil);
+                }
             } else {
                 if (error.code == MKErrorPlacemarkNotFound || error.code == MKErrorDirectionsNotFound) {
                     [self succeedWithPlaces:@[]];
                 } else if (error.code != MKErrorLoadingThrottled) {
                     // May happen if the user type too fast some rare time. We don't want to notify anyone about this error. It's gonna fix itself.
-                    self.resultBlock(nil, error);
+                    if (self.resultBlock != nil) {
+                        self.resultBlock(nil, error);
+                    }
                 }
             }
             [self cleanup];
